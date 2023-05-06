@@ -1,0 +1,531 @@
+# Project Name
+PROJECT_NAME: "internal"
+
+platform:
+  iamTitle: ""
+  homeTitle: ""
+  annotateTitle: ""
+  type: "iqi"
+  # type例子：
+  # 如果是部署aistudio，就填aistudio
+  # 如果是部署工业质检，就填iqi
+  iamCloseAuth: false
+  defaultUserGroups:
+    # define initialized user_group
+    [ "operator-user-group","orgadmin-user-group" ]
+
+jwt:
+  expiration: 720
+
+mailServer:
+  smtpHost: ""
+  smtpPort: ""
+  userName: ""
+  password: ""
+  status: False
+
+s3:
+  endpoint: "http://minio.kube-system:9000"
+
+inferConfig:
+  dataSchemaName: yuhai-infer
+  imgSchemaName: yuhai-image
+
+inferProxyDefaultConfigs:
+  - creator: admin
+    name: yuhai-agent-proxy-default-cfg
+    description:
+    inferImage: harbor.apulis.cn:8443/apulis-iqi/infra/init-job-tool:v3.7.2-rc2
+    isPreset: true
+    proxyConfigs:
+      - modelUri: /infer
+        proxyUri: /infer
+        connectorInfos:
+          - connectorName: yuhai-data-v1
+            type: http_to_pg_new
+          - connectorName: yuhai-image-v1
+            type: http_to_image
+
+
+license:
+  enabled: false
+
+# the name of cluster
+CLUSTER_NAME: "DLWS"
+
+# 离线安装系统软件包 (offline|online)
+INSTALL_SOURCE: "online"
+
+# default harbor location
+HARBOR_LOCATION: "/mnt/data/harbor"
+
+# -------- Additional Variables (don't change the default value right now)---
+# Binaries Directory
+i18n: "zh-CN"
+
+# the prefix location of nfs
+nfs_path_prefix: "/mnt/data/nfs"
+
+bin_dir: "/opt/kube/bin"
+
+manifest_dest: "/root/build"
+
+# CA and other components cert/key Directory
+ca_dir: "/etc/kubernetes/ssl"
+
+# etcd ca Directory
+etcd_ca_dir: "/etc/etcd/ssl"
+
+# Deploy Directory (aiarts workspace)
+base_dir: "{{ lookup('env', 'PWD') }}"
+
+# resource directory (include apt, images, dlws code and other package)
+resource_dir: "{{base_dir}}/resources"
+
+# harbor domain value
+HARBOR_DOMAIN: "harbor.internal.cn"
+
+# harbor https port
+HARBOR_HTTPS_PORT: 8443
+
+# NPU Fragmenting
+npu_fragmenting: true
+
+# split the 710 infer card the value should be "no", "vir01", "vir02", "vir04"
+split_710: no
+
+# vendor: apulis huawei guanjie yuhai byd
+vendor: apulis
+
+npu_series:
+  mark_910: "a910"
+  mark_310: "a310"
+  mark_710: "a710"
+
+# CPU Architecture
+arch_map:
+  i386: "386"
+  x86_64: "amd64"
+  aarch64: "arm64"
+  armv7l: "armv7"
+  armv6l: "armv6"
+
+istio_config:
+  enableExtAuthz: true
+  images_hub: "harbor.apulis.cn:8443/istio"
+  tag: "1.9.4"
+  jwtPolicy: "first-party-jwt"
+  accessLogFile: "/dev/stdout"
+
+ISTIO_INJECTION: enabled
+
+plugin_counter_switch:
+  step: 500
+
+thirdparty_images:
+  local-volume-provisioner:
+    name: "harbor.apulis.cn:8443/thirdparty/k8s.gcr.io/sig-storage/local-volume-provisioner"
+    tag: "v2.4.0"
+  bitnami-minio:
+    name: "harbor.apulis.cn:8443/thirdparty/bitnami/minio"
+    tag: "2021.9.18-debian-10-r0"
+  debug-ctl:
+    name: "harbor.apulis.cn:8443/apulisedge/alpine_added"
+    tag: "3.12"
+  dfs-cache-controller:
+    name: "harbor.apulis.cn:8443/thirdparty/sandstone/cache-controller"
+    tag: "v1.1.1"
+  dfs-csi-driver:
+    name: "harbor.apulis.cn:8443/thirdparty/sandstone/dfs-csi-driver"
+    tag: "v1.1.1"
+  csi-snapshotter:
+    name: "harbor.apulis.cn:8443/release/k8s.gcr.io/sig-storage/csi-snapshotter"
+    tag: "v3.0.0"
+  csi-snapshotter-controller:
+    name: "harbor.apulis.cn:8443/thirdparty/csiplugin/snapshot-controller"
+    tag: "v3.0.3"
+  csi-resizer:
+    name: "harbor.apulis.cn:8443/release/k8s.gcr.io/sig-storage/csi-resizer"
+    tag: "v1.0.0"
+  alpine:
+    name: "harbor.apulis.cn:8443/thirdparty/alpine"
+    tag: "latest"
+  mongodb:
+    name: "harbor.apulis.cn:8443/thirdparty/bitnami/mongodb"
+    tag: "4.4.10"
+  bitnami-shell:
+    name: "harbor.apulis.cn:8443/thirdparty/bitnami/bitnami-shell"
+    tag: "10-debian-10-r187"
+  logging-operator:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/logging-operator"
+    tag: "aistudio-v1.3.0-rc0"
+  loki:
+    name: "harbor.apulis.cn:8443/thirdparty/grafana/loki"
+    tag: "2.3.0"
+  loggie:
+    name: "harbor.apulis.cn:8443/thirdparty/infra/loggie"
+    tag: "release-v1.3"
+  nfs-csi:
+    name: "harbor.apulis.cn:8443/thirdparty/mcr.microsoft.com/k8s/csi/nfs-csi"
+    tag: "latest"
+  csi-provisioner:
+    name: "harbor.apulis.cn:8443/thirdparty/k8s.gcr.io/sig-storage/csi-provisioner"
+    tag: "v2.2.2"
+  postgres:
+    name: "harbor.apulis.cn:8443/aistudio/infra/crunchy-postgres-ha"
+    tag: "centos8-13.4-0"
+  pgBackRest:
+    name: "harbor.apulis.cn:8443/aistudio/infra/crunchy-pgbackrest"
+    tag: "centos8-2.33-2"
+  knative-serving-webhook:
+    name: "harbor.apulis.cn:8443/knative/webhook"
+    tag: "v0.22.0"
+  knative-serving-queue:
+    name: "harbor.apulis.cn:8443/knative/queue"
+    tag: "v0.22.0"
+  knative-serving-controller:
+    name: "harbor.apulis.cn:8443/knative/controller"
+    tag: "v0.22.0"
+  knative-serving-activator:
+    name: "harbor.apulis.cn:8443/knative/activator"
+    tag: "v0.22.0"
+  knative-serving-autoscaler:
+    name: "harbor.apulis.cn:8443/knative/autoscaler"
+    tag: "v0.22.0"
+  knative-net-istio-webhook:
+    name: "harbor.apulis.cn:8443/knative/net-istio-webhook"
+    tag: "v0.22.0"
+  knative-net-istio-controller:
+    name: "harbor.apulis.cn:8443/knative/net-istio-controller"
+    tag: "v0.22.0"
+  kfserving-controller:
+    name: "harbor.apulis.cn:8443/kfserving/kfserving-controller"
+    tag: "v0.5.1"
+  kfserving-storage-initializer:
+    name: "harbor.apulis.cn:8443/kfserving/storage-initializer"
+    tag: "v0.5.1"
+  kfserving-kube-rbac-proxy:
+    name: "harbor.apulis.cn:8443/kfserving/kube-rbac-proxy"
+    tag: "v0.4.0"
+  kfserving-triton:
+    name: "harbor.apulis.cn:8443/kfserving/tritonserver"
+    tag: "20.08-py3"
+  vault:
+    name: "harbor.apulis.cn:8443/huawei630/vault"
+    tag: "1.6.2"
+  bank-vaults:
+    name: "harbor.apulis.cn:8443/huawei630/ghcr.io/banzaicloud/bank-vaults"
+    tag: "1.13.0"
+  vault-operator:
+    name: "harbor.apulis.cn:8443/huawei630/ghcr.io/banzaicloud/vault-operator"
+    tag: "1.13.0"
+  vault-secrets-webhook:
+    name: "harbor.apulis.cn:8443/huawei630/ghcr.io/banzaicloud/vault-secrets-webhook"
+    tag: "1.13.0"
+  vault-env:
+    name: "harbor.apulis.cn:8443/huawei630/ghcr.io/banzaicloud/vault-env"
+    tag: "1.13.0"
+  openresty:
+    name: "harbor.apulis.cn:8443/huawei630/openresty/openresty"
+    tag: "1.19.9.1rc1-0-bionic"
+  grafana:
+    name: "harbor.apulis.cn:8443/huawei630/grafana/grafana"
+    tag: "8.0.3"
+  grafana-zh:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/grafana-zh"
+    tag: "8.0.3"
+  curl-images:
+    name: "harbor.apulis.cn:8443/huawei630/curlimages/curl"
+    tag: "7.73.0"
+  bash:
+    name: "harbor.apulis.cn:8443/huawei630/bash"
+    tag: "5"
+  k8s-prometheus-adapter:
+    name: "harbor.apulis.cn:8443/huawei630/directxman12/k8s-prometheus-adapter"
+    tag: "v0.7.0"
+  kfserving-pytorchserver:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/kfserving-pytorchserver"
+    tag: "1.5.1"
+  golang:
+    name: "harbor.apulis.cn:8443/huawei630/golang"
+    tag: "1.13.7-alpine3.11"
+  prometheus-operator:
+    name: "harbor.apulis.cn:8443/huawei630/jessestuart/prometheus-operator"
+    tag: "v0.38.0"
+  coredns:
+    name: "harbor.apulis.cn:8443/aiarts_v1.5.0_rc8/k8s.gcr.io/coredns"
+    tag: "1.6.7"
+  pause:
+    name: "harbor.apulis.cn:8443/huawei630/k8s.gcr.io/pause"
+    tag: "3.2"
+  postgresql:
+    name: "harbor.apulis.cn:8443/release/postgres"
+    tag: "13.3"
+  psql-permissions:
+    name: "harbor.apulis.cn:8443/huawei630/debian"
+    tag: "buster-slim"
+  kube-vip:
+    name: "harbor.apulis.cn:8443/aiarts_v1.5.0_rc8/plndr/kube-vip"
+    tag: "0.1.8"
+  redis:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/redis"
+    tag: "6.2.4-debian-10-r0"
+  volume-permissions:
+    name: "harbor.apulis.cn:8443/huawei630/bitnami/bitnami-shell"
+    tag: "10-debian-10-r97"
+  vc-scheduler:
+    name: "harbor.apulis.cn:8443/volcanosh/vc-scheduler"
+    tag: "v3.0.rc3"
+  vc-controller-manager:
+    name: "harbor.apulis.cn:8443/volcanosh/vc-controller-manager"
+    tag: "v3.0.rc3"
+  ascend-k8sdeviceplugin:
+    name: "harbor.apulis.cn:8443/volcanosh/ascend-k8sdeviceplugin"
+    tag: "v3.0.rc3"
+  ascend-k8sdeviceplugin-310:
+    name: "harbor.apulis.cn:8443/volcanosh/ascend-k8sdeviceplugin"
+    tag: "v3.0.rc3"
+  nvidia-device-plugin:
+    name: "harbor.apulis.cn:8443/huawei630/nvcr.io/nvidia/k8s-device-plugin"
+    tag: "v0.9.0"
+  hw-license-manager:
+    name: "harbor.apulis.cn:8443/huawei630/license-manager"
+    tag: "2.0.4"
+  busybox:
+    name: "harbor.apulis.cn:8443/release/busybox"
+    tag: "1.28"
+  liveness-probe:
+    name: "harbor.apulis.cn:8443/thirdparty/k8s.gcr.io/sig-storage/livenessprobe"
+    tag: "v2.4.0"
+  csi-node-driver-registrar:
+    name: "harbor.apulis.cn:8443/thirdparty/k8s.gcr.io/sig-storage/csi-node-driver-registrar"
+    tag: "v2.3.0"
+  rabbitmq:
+    name: "harbor.apulis.cn:8443/test02/bitnami/rabbitmq"
+    tag: "3.9.12"
+  calico-kube-controllers:
+    name: "harbor.apulis.cn:8443/release/calico/kube-controllers"
+    tag: "v3.22.1"
+  calico-node:
+    name: "harbor.apulis.cn:8443/release/calico/node"
+    tag: "v3.22.1"
+  calico-cni:
+    name: "harbor.apulis.cn:8443/release/calico/cni"
+    tag: "v3.22.1"
+  calico-flexvol-driver:
+    name: "harbor.apulis.cn:8443/release/calico/pod2daemon-flexvol"
+    tag: "v3.22.1"
+  nfs-client-provisioner:
+    name: "harbor.apulis.cn:8443/huawei630/quay.io/external_storage/nfs-client-provisioner"
+    tag: "v3.1.0-k8s1.11"
+  npu-exporter:
+    name: "harbor.apulis.cn:8443/huawei630/public-ascendhub/npu-exporter"
+    tag: "v20.2.0"
+  traefik:
+    name: "harbor.apulis.cn:8443/release/traefik"
+    tag: "2.4.8"
+  kube-state-metrics:
+    name: "harbor.apulis.cn:8443/huawei630/bitnami/kube-state-metrics"
+    tag: "2"
+  alertmanager:
+    name: "harbor.apulis.cn:8443/huawei630/quay.io/prometheus/alertmanager"
+    tag: "v0.21.0"
+  configmap-reload:
+    name: "harbor.apulis.cn:8443/huawei630/jimmidyson/configmap-reload"
+    tag: "v0.5.0"
+  node-exporter:
+    name: "harbor.apulis.cn:8443/huawei630/quay.io/prometheus/node-exporter"
+    tag: "v1.1.2"
+  prometheus:
+    name: "harbor.apulis.cn:8443/huawei630/quay.io/prometheus/prometheus"
+    tag: "v2.26.0"
+  pushgateway:
+    name: "harbor.apulis.cn:8443/huawei630/prom/pushgateway"
+    tag: "v1.3.1"
+  watchdog:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/dlworkspace_watchdog"
+    tag: "iqi"
+  postgres-exporter:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/postgres-exporter"
+    tag: "v0.9.0"
+  cert-manager-cainjector:
+    name: "harbor.apulis.cn:8443/aistudio/quay.io/jetstack/cert-manager-cainjector"
+    tag: "v1.3.1"
+  cert-manager:
+    name: "harbor.apulis.cn:8443/aistudio/quay.io/jetstack/cert-manager-controller"
+    tag: "v1.3.1"
+  cert-manager-webhook:
+    name: "harbor.apulis.cn:8443/aistudio/quay.io/jetstack/cert-manager-webhook"
+    tag: "v1.3.1"
+  dockerd:
+    name: "harbor.apulis.cn:8443/thirdparty/docker"
+    tag: "dind"
+  istio-proxyv:
+    name: "harbor.apulis.cn:8443/istio/proxyv2"
+    tag: "1.9.4"
+  istio-pilot:
+    name: "harbor.apulis.cn:8443/istio/pilot"
+    tag: "1.9.4"
+
+
+apulis_images:
+  tensorboard:
+    name: "harbor.apulis.cn:8443/algorithm/apulistech/tensorboard"
+    tag: "latest"
+  mindinsight:
+    name: "harbor.apulis.cn:8443/algorithm/apulistech/mindinsight"
+    tag: "1.3.0"
+  infer-proxy:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/infer-proxy"
+    tag: "aistudio-v1.2.0-rc0"
+  init-job-tool:
+    name: "harbor.apulis.cn:8443/apulis-iqi/infra/init-job-tool"
+    tag: "v3.7.2-rc2"
+  # init-container:
+  #   name: "harbor.apulis.cn:8443/aistudio/infra/init-container"
+  #   tag: "v3.7.1-rc2"
+  adhub-backend-api-server:
+    name: "harbor.apulis.cn:8443/apulis-iqi/apulistech/adhub-backend"
+    tag: "v3.7.2-rc5"
+  worker-iqi-auto-annotation:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/ad_magic_auto_annotation"
+    tag: "v0.1.0"
+  worker-ad-hub-http-pg-connector-job:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/data-conn-http-to-postgres"
+    tag: "aistudio-v1.4.3"
+  worker-ad-hub-http-mongodb-connector:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/data-conn-http-to-mongodb"
+    tag: "dev"
+  worker-compressor:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/worker-compressor"
+    tag: "v0.1.0-rc0"
+  admagic-backend-api-server:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/admagic-backend"
+    tag: "aistudio-v1.4.3"
+  worker-ad-hub-http-image-connector-job:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/data-conn-http-image"
+    tag: "aistudio-v1.5.0-rc2"
+  worker-cv-annot-convertor:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/worker-cv-annot-convertor"
+    tag: "v1.1.1-rc0"
+  admagic-backend:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/admagic-backend"
+    tag: "aistudio-v1.4.3"
+  ad-hub-worker-delete-expired-files:
+    name: "harbor.apulis.cn:8443/aistudio/delete-expired-files-job"
+    tag: "master"
+  imgproxy:
+    name: "harbor.apulis.cn:8443/thirdparty/darthsim/imgproxy"
+    tag: "v3.7"
+  ffmpeg:
+    name: "harbor.apulis.cn:8443/aistudio/infra/ffmpeg"
+    tag: "4-ubuntu"
+  ai-lab:
+    name: "harbor.apulis.cn:8443/aistudio/bmod/ai-lab"
+    tag: "v3.7.2-rc1"
+  file-server:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/aistudio-fileserver"
+    tag: "aistudio-v1.7.1-rc4"
+  job-scheduler:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/job-scheduler"
+    tag: "aistudio-v1.4.3-rc18"
+  iam-backend:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/aistudio-iam-backend"
+    tag: "aistudio-v1.4.3-rc31"
+  iam-frontend:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/iam-aistudio-frontend"
+    tag: "industry-v3.7.1-rc2"
+  aom-backend:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/aom-backend"
+    tag: "aistudio-v1.4.3-rc32"
+  apsc-frontend:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/apsc-frontend"
+    tag: "industry-v3.7.1-rc0"
+  apsc-bff:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/apsc-bff"
+    tag: "aistudio-v1.4.3-rc27"
+  job-exporter:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/job-exporter"
+    tag: "aistudio-v1.1.0-rc0"
+  apworkshop-backend:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/ap-workshop-backend"
+    tag: "v3.7.2-rc0"
+  model-tranformer:
+    name: "harbor.apulis.cn:8443/algorithm/apulistech/apflow-convert-tool" # 模型转换镜像
+    tag: "21.0.2-amd64"
+  manual-model-transformer:
+    name: "harbor.apulis.cn:8443/algorithm/apulistech/apworkshop-convert-tool" # （页面触发）模型转换镜像
+    tag: "20.11-21.0.3"
+  job-wrapper:
+    name: "harbor.apulis.cn:8443/istio/job-wrapper"
+    tag: "latest"
+  ruid:
+    name: "harbor.apulis.cn:8443/aistudio/infra/ruid"  # for random unique id generator
+    tag: "aistudio-v1.3.0-rc1"
+  spark-data-work-flow-cpu:
+    name: "harbor.apulis.cn:8443/aistudio/app/data-work-flow"
+    tag: "aistudio-v1.4.3-py"
+  spark-data-work-flow-gpu:
+    name: "harbor.apulis.cn:8443/aistudio/app/data-work-flow"
+    tag: "aistudio-v1.4.3-gpu-11.2.2-py"
+  delete-rtsp-conn-files:
+    name: "harbor.apulis.cn:8443/aistudio/delete-connector-files-job"
+    tag: "master"
+  move-file-to-directory:
+    name: "harbor.apulis.cn:8443/aistudio/move-file-to-directory"
+    tag: "master"
+  spark-reader-writer:
+    name: "harbor.apulis.cn:8443/aistudio/app/sparkreaderwriter"
+    tag: "1.0-online"
+  data-work-flow:
+    name: "harbor.apulis.cn:8443/aistudio/app/data-work-flow"
+    tag: "aistudio-v1.4.3-py"
+  infer-monitor:
+    name: "harbor.apulis.cn:8443/aistudio/app/infer-monitor"
+    tag: "release-v3.2.0"
+  worker-coco-analysis:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/worker-coco-analysis"
+    tag: "master"
+  dataset-worker-img-enhance:
+    name: "harbor.apulis.cn:8443/huawei630/apulistech/dataset-worker-img-enhance"
+    tag: "songshanhu-v2.8.0-rc17"
+  log-cleaner:
+    name: "harbor.apulis.cn:8443/aistudio/apulistech/log-cleaner"
+    tag: "v0.1.0"
+  plugin-counter:
+    name: "harbor.apulis.cn:8443/apulis-iqi/app/plugin-counter"
+    tag: "apulis-iqi-v0.0.1"
+  aimstack:
+    name: "harbor.apulis.cn:8443/aistudio/app/aim"
+    tag: "aistudio-v1.8.0-rc1"
+  backend-industry:
+    name: "harbor.apulis.cn:8443/apulis-iqi/backend/backend-industry"
+    tag: "v3.7.2-rc8"
+  bff-admin:
+    name: "harbor.apulis.cn:8443/apulis-iqi/app/bff-admin"
+    tag: "v3.7.2-rc2"
+  bff-app-guanjie:
+    name: "harbor.apulis.cn:8443/apulis-iqi/app/bff-app-guanjie"
+    tag: "v3.7.2-rc1"
+  bff-app-yuhai:
+    name: "harbor.apulis.cn:8443/apulis-iqi/app/bff-app-yuhai"
+    tag: "v3.7.2"
+  frontend-admin:
+    name: "harbor.apulis.cn:8443/apulis-iqi/app/frontend-admin"
+    tag: "v3.7.2-rc13"
+  frontend-app-template:
+    name: "harbor.apulis.cn:8443/apulis-iqi/app/frontend-app-template"
+    tag: "v3.7.2-rc13"
+  worker-ad-hub-schema-base-connector-job:
+    name: "harbor.apulis.cn:8443/dataplatform/apulistech/schema-based-conn"
+    tag: "v1.0.1-rc0"
+  db-querier:
+    name: "harbor.apulis.cn:8443/apulis-iqi/apulistech/db-querier"
+    tag: "v3.7.2-rc1"
+  service-workflow:
+    name: "harbor.apulis.cn:8443/apulis-iqi/apulistech/service-workflow"
+    tag: "v3.7.2-rc5"
+
+
+
+
